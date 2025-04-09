@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Niemand Weet</title>
+  <title>Mijn Reveal.js Presentatie</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Voor mobielvriendelijkheid -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/black.css">
   <style>
@@ -16,9 +17,26 @@
     .reveal {
       background-color: #0e3847; /* Achtergrond voor het reveal.js canvas */
     }
+
+    /* Stijl voor aftelcounter */
+    #countdown {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 10em; /* Grotere cijfers */
+      font-family: Arial, sans-serif;
+      color: #ffffff;
+      text-align: center;
+      display: none; /* Start verborgen */
+      z-index: 1000; /* Zorg ervoor dat het boven alles staat */
+    }
   </style>
 </head>
 <body>
+  <!-- Countdown element -->
+  <div id="countdown">3</div>
+
   <div class="reveal">
     <div class="slides">
       <!-- Dia 1 -->
@@ -62,19 +80,33 @@
       autoSlide: 5000, // Schakelt elke 5 seconden automatisch naar de volgende dia
       loop: true,      // Gaat terug naar de eerste dia na de laatste
       controls: true,  // Toont navigatieknoppen
-      progress: true   // Toont een voortgangsbalk
+      progress: false  // Verbergt voortgangsindicator linksonder
     });
 
-    // Zet de presentatie automatisch in volledig scherm
-    document.addEventListener('DOMContentLoaded', () => {
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen();
-      } else if (document.documentElement.webkitRequestFullscreen) { // Voor Safari
-        document.documentElement.webkitRequestFullscreen();
-      } else if (document.documentElement.msRequestFullscreen) { // Voor oudere IE/Edge
-        document.documentElement.msRequestFullscreen();
-      }
-    });
+    // Countdown logica
+    const countdownElement = document.getElementById('countdown');
+    const showCountdown = () => {
+      countdownElement.style.display = 'block'; // Toon de afteller
+      let countdownValue = 3;
+
+      countdownElement.innerText = countdownValue; // Start bij 3
+      const interval = setInterval(() => {
+        countdownValue--;
+        countdownElement.innerText = countdownValue; // Update de waarde
+
+        if (countdownValue <= 0) {
+          clearInterval(interval); // Stop de timer
+          countdownElement.style.display = 'none'; // Verberg de afteller
+          Reveal.next(); // Ga naar de volgende dia
+        }
+      }, 1000); // Verandert elke seconde
+    };
+
+    // Countdown tonen vóór elke dia
+    Reveal.addEventListener('slidechanged', showCountdown);
+
+    // Countdown tonen bij het starten van de presentatie
+    document.addEventListener('DOMContentLoaded', showCountdown);
   </script>
 </body>
 </html>
