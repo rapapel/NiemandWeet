@@ -96,17 +96,19 @@
         countdownValue--;
         countdownElement.innerText = countdownValue;
 
-        if (countdownValue <= 0) {
+        if (countdownValue <= 1) {
           clearInterval(interval); // Stop aftellen
-          countdownElement.innerText = 'Klik om door te gaan'; // Instructie voor volgende dia
+          countdownElement.innerText = countdownValue; // Laat de teller op 1 blijven
         }
       }, 1000); // Tel elke seconde af
     };
 
-    // Klik-event om naar de volgende dia te gaan
-    countdownElement.addEventListener('click', () => {
-      countdownElement.style.display = 'none'; // Verberg afteller
-      Reveal.next(); // Ga naar de volgende dia
+    // Event voor de volgende dia (op klik)
+    document.addEventListener('click', () => {
+      if (countdownValue <= 1) {
+        countdownElement.style.display = 'none'; // Verberg afteller
+        Reveal.next(); // Ga naar de volgende dia
+      }
     });
 
     // Countdown starten bij elke diawissel
