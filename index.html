@@ -1259,39 +1259,41 @@
       progress: false // Verbergt voortgangsindicator linksonder
     });
 
-    // Countdown logica
-    const countdownElement = document.getElementById('countdown');
-    let countdownValue = 3;
+ // Countdown logica
+const countdownElement = document.getElementById('countdown');
+let countdownValue = 3;
 
-    const startCountdown = () => {
-      countdownValue = 3; // Reset afteller
-      countdownElement.innerText = countdownValue;
-      countdownElement.style.display = 'block'; // Toon afteller
+const startCountdown = () => {
+  countdownValue = 3; // Reset afteller
+  countdownElement.innerText = countdownValue;
+  countdownElement.style.display = 'block'; // Toon afteller
 
-      const interval = setInterval(() => {
-        countdownValue--;
-        countdownElement.innerText = countdownValue;
+  const interval = setInterval(() => {
+    countdownValue--;
+    countdownElement.innerText = countdownValue;
 
-        if (countdownValue <= 0) {
-          clearInterval(interval); // Stop aftellen
-          countdownElement.innerText = '1'; // Instructie voor volgende dia
-        }
-      }, 1000); // Tel elke seconde af
-    };
+    if (countdownValue <= 0) {
+      clearInterval(interval); // Stop aftellen
+      countdownElement.innerText = '1'; // Blijft op "1" staan
+    }
+  }, 1000); // Tel elke seconde af
+};
 
-    // Klik-event om naar de volgende dia te gaan
-    countdownElement.addEventListener('click', () => {
-      countdownElement.style.display = 'none'; // Verberg afteller
-      Reveal.next(); // Ga naar de volgende dia
-    });
+// Klik-event om door te gaan met de volgende dia (overal op de pagina)
+document.addEventListener('click', () => {
+  if (countdownValue <= 0) { // Alleen door naar de volgende dia als countdown is voltooid
+    countdownElement.style.display = 'none'; // Verberg afteller
+    Reveal.next(); // Ga naar de volgende dia
+  }
+});
 
-    // Countdown starten bij elke diawissel
-    Reveal.addEventListener('slidechanged', () => {
-      startCountdown();
-    });
+// Countdown starten bij elke diawissel
+Reveal.addEventListener('slidechanged', () => {
+  startCountdown();
+});
 
-    // Countdown starten bij het laden van de pagina
-    document.addEventListener('DOMContentLoaded', startCountdown);
+// Countdown starten bij het laden van de pagina
+document.addEventListener('DOMContentLoaded', startCountdown);
   </script>
 </body>
 </html>
