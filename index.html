@@ -77,36 +77,45 @@
   <script>
     // Configuratie voor Reveal.js
     Reveal.initialize({
-      autoSlide: 5000, // Schakelt elke 5 seconden automatisch naar de volgende dia
-      loop: true,      // Gaat terug naar de eerste dia na de laatste
-      controls: true,  // Toont navigatieknoppen
-      progress: false  // Verbergt voortgangsindicator linksonder
+      autoSlide: 0, // Dia's schakelen niet automatisch
+      loop: true,   // Gaat terug naar de eerste dia na de laatste
+      controls: true, // Toont navigatieknoppen
+      progress: false // Verbergt voortgangsindicator linksonder
     });
 
     // Countdown logica
     const countdownElement = document.getElementById('countdown');
-    const showCountdown = () => {
-      countdownElement.style.display = 'block'; // Toon de afteller
-      let countdownValue = 3;
+    let countdownValue = 3;
 
-      countdownElement.innerText = countdownValue; // Start bij 3
+    const startCountdown = () => {
+      countdownValue = 3; // Reset afteller
+      countdownElement.innerText = countdownValue;
+      countdownElement.style.display = 'block'; // Toon afteller
+
       const interval = setInterval(() => {
         countdownValue--;
-        countdownElement.innerText = countdownValue; // Update de waarde
+        countdownElement.innerText = countdownValue;
 
         if (countdownValue <= 0) {
-          clearInterval(interval); // Stop de timer
-          countdownElement.style.display = 'none'; // Verberg de afteller
-          Reveal.next(); // Ga naar de volgende dia
+          clearInterval(interval); // Stop aftellen
+          countdownElement.innerText = 'Klik om door te gaan'; // Instructie voor volgende dia
         }
-      }, 1000); // Verandert elke seconde
+      }, 1000); // Tel elke seconde af
     };
 
-    // Countdown tonen vóór elke dia
-    Reveal.addEventListener('slidechanged', showCountdown);
+    // Klik-event om naar de volgende dia te gaan
+    countdownElement.addEventListener('click', () => {
+      countdownElement.style.display = 'none'; // Verberg afteller
+      Reveal.next(); // Ga naar de volgende dia
+    });
 
-    // Countdown tonen bij het starten van de presentatie
-    document.addEventListener('DOMContentLoaded', showCountdown);
+    // Countdown starten bij elke diawissel
+    Reveal.addEventListener('slidechanged', () => {
+      startCountdown();
+    });
+
+    // Countdown starten bij het laden van de pagina
+    document.addEventListener('DOMContentLoaded', startCountdown);
   </script>
 </body>
 </html>
