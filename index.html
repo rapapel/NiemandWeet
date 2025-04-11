@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Niemand Weet</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Niemand Weet 2.0</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/black.css">
   <style>
@@ -22,7 +22,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 10em;
+      font-size: 10vw; /* Dynamisch lettertype afhankelijk van schermbreedte */
       font-family: Arial, sans-serif;
       color: #ffffff;
       text-align: center;
@@ -30,8 +30,24 @@
       z-index: 1000;
     }
 
+    img {
+      max-width: 100%;
+      height: auto; /* Zorg ervoor dat afbeeldingen proportioneel schalen */
+    }
+
     .slides section {
       transform: scale(1.25); /* Schaal de dia's met 25% */
+    }
+
+    /* Verbeterde styling voor kleinere schermen */
+    @media (max-width: 768px) {
+      .slides section {
+        transform: scale(1); /* Geen extra schaal op kleine schermen */
+      }
+
+      #countdown {
+        font-size: 15vw; /* Grotere afteltekst op kleine schermen */
+      }
     }
   </style>
 </head>
@@ -39,16 +55,7 @@
   <div id="countdown">3</div>
 
   <div class="reveal">
-    <div class="slides">
-      <section><img src="dia1.png" alt="Dia 1" style="width: 100%; height: auto;"></section>
-      <section><img src="dia2.png" alt="Dia 2" style="width: 100%; height: auto;"></section>
-      <section><img src="dia3.png" alt="Dia 3" style="width: 100%; height: auto;"></section>
-      <section><img src="dia4.png" alt="Dia 4" style="width: 100%; height: auto;"></section>
-      <section><img src="dia5.png" alt="Dia 5" style="width: 100%; height: auto;"></section>
-      <section><img src="dia6.png" alt="Dia 6" style="width: 100%; height: auto;"></section>
-      <section><img src="dia7.png" alt="Dia 7" style="width: 100%; height: auto;"></section>
-      <section><img src="dia8.png" alt="Dia 8" style="width: 100%; height: auto;"></section>
-    </div>
+    <div class="slides"></div> <!-- Dynamische slides worden hier geladen -->
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.min.js"></script>
@@ -61,23 +68,21 @@
       progress: false
     });
 
-    const slides = Array.from(document.querySelectorAll('.slides section'));
-
-    // Shuffle-functie om slides willekeurig te ordenen
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
-
-    // Schud de slides
-    const shuffledSlides = shuffle(slides);
     const container = document.querySelector('.slides');
-    container.innerHTML = '';
 
-    shuffledSlides.forEach(slide => container.appendChild(slide));
+    // Dynamisch toevoegen van dia's van "dia1.png" tot "dia400.png"
+    const maxSlides = 400;
+    for (let i = 1; i <= maxSlides; i++) {
+      const img = new Image();
+      img.src = `dia${i}.png`;
+
+      // Controleer of de afbeelding bestaat
+      img.onload = () => {
+        const section = document.createElement('section');
+        section.appendChild(img);
+        container.appendChild(section);
+      };
+    }
 
     // Countdown logica
     const countdownElement = document.getElementById('countdown');
@@ -96,7 +101,7 @@
           clearInterval(interval); // Stop aftellen
           countdownElement.style.display = 'none'; // Verberg afteller volledig
         }
-      }, 1000); // Elke seconde aftellen zonder overslaan
+      }, 1000); // Elke seconde aftellen
     };
 
     // Klik-event voor navigatie en aftelling herstarten
