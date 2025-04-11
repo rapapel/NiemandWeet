@@ -29,6 +29,10 @@
       display: none;
       z-index: 1000;
     }
+
+    .slides section {
+      transform: scale(1.25); /* Schaal de dia's met 25% */
+    }
   </style>
 </head>
 <body>
@@ -92,7 +96,7 @@
           clearInterval(interval); // Stop aftellen
           countdownElement.style.display = 'none'; // Verberg afteller volledig
         }
-      }, 1000);
+      }, 1000); // Elke seconde aftellen zonder overslaan
     };
 
     // Klik-event voor navigatie en aftelling herstarten
