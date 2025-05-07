@@ -1,122 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="utf-8">
-  <title>Niemand Weet 2.1</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/black.css">
-  <style>
-    body {
-      background-color: #0e3847;
-      margin: 0;
-      padding: 0;
-    }
 
-    .reveal {
-      background-color: #0e3847;
-    }
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0">
 
-    #countdown {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 10vw; /* Dynamisch lettertype afhankelijk van schermbreedte */
-      font-family: Arial, sans-serif;
-      color: #ffffff;
-      text-align: center;
-      display: none;
-      z-index: 1000;
-    }
+<style>
+#count {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 50vh;
+	font-style: bold;
+	color: white;
+}
+  
+#pic {
+	max-height:100vh;
+	width:auto;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+</style>
 
-    img {
-      max-width: 100%;
-      height: auto; /* Zorg ervoor dat afbeeldingen proportioneel schalen */
-    }
-
-    .slides section {
-      transform: scale(1.25); /* Schaal de dia's met 25% */
-    }
-
-    /* Verbeterde styling voor kleinere schermen */
-    @media (max-width: 768px) {
-      .slides section {
-        transform: scale(1); /* Geen extra schaal op kleine schermen */
-      }
-
-      #countdown {
-        font-size: 15vw; /* Grotere afteltekst op kleine schermen */
-      }
-    }
-  </style>
+<title>Niemand Weet</title>
 </head>
-<body>
-  <div id="countdown">3</div>
 
-  <div class="reveal">
-    <div class="slides"></div> <!-- Dynamische slides worden hier geladen -->
-  </div>
+<body bgcolor="#0e3847">
 
-  <script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.min.js"></script>
-  <script>
-    // Configuratie voor Reveal.js
-    Reveal.initialize({
-      autoSlide: 0,
-      loop: false,
-      controls: true,
-      progress: false
-    });
+<div id="container">
 
-    const container = document.querySelector('.slides');
+	<img id="pic" onclick="startCount(3)" src="dias/Dia1.PNG" style="">
+	<div id="count"></div>
 
-    // Dynamisch toevoegen van dia's van "dia1.png" tot "dia400.png"
-    const maxSlides = 400;
-    for (let i = 1; i <= maxSlides; i++) {
-      const img = new Image();
-      img.src = `./dia${i}.png`;
+</div>
 
-      // Controleer of de afbeelding bestaat
-      img.onload = () => {
-        const section = document.createElement('section');
-        section.appendChild(img);
-        container.appendChild(section);
-      };
-    }
 
-    // Countdown logica
-    const countdownElement = document.getElementById('countdown');
-    let countdownValue = 3;
+<script type="text/javascript">
+//setTimeout(nieuwMens, 3000)
+	var aantal = 190-1;
+	
+	function nieuwMens(){
+		document.documentElement.requestFullscreen();
+		var ranID = Math.floor( (Math.random() * aantal) + 2);
+		document.getElementById('pic').src = ('dias/Dia' + ranID + '.PNG');
+	}
 
-    const startCountdown = () => {
-      countdownValue = 3; // Reset afteller
-      countdownElement.innerText = countdownValue;
-      countdownElement.style.display = 'block';
+	
+function startCount(seconds){
+  
+(function(){
+	var counter = seconds;
+	span = document.getElementById("count");
+	span.innerHTML = counter;
+	document.getElementById("pic").style.opacity = 0.5;
+	
+	setInterval(function() {
+		counter--;
+		if (counter >= 0) {
+			span = document.getElementById("count");
+			span.innerHTML = counter;
+		}
+		// Display 'counter' wherever you want to display it.
+		if (counter === 0) {
+			nieuwMens();
+			span = document.getElementById("count");
+			span.innerHTML = '';
+			document.getElementById("pic").style.opacity = 1;
+			clearInterval(counter);
+		}
+    
+	}, 1000);
+    
+})();
+  
+}
 
-      const interval = setInterval(() => {
-        countdownValue--;
-        if (countdownValue > 0) {
-          countdownElement.innerText = countdownValue;
-        } else {
-          clearInterval(interval); // Stop aftellen
-          countdownElement.style.display = 'none'; // Verberg afteller volledig
-        }
-      }, 1000); // Elke seconde aftellen
-    };
-
-    // Klik-event voor navigatie en aftelling herstarten
-    document.addEventListener('click', () => {
-      if (countdownValue <= 0) {
-        Reveal.next(); // Ga naar de volgende dia
-        startCountdown(); // Start aftelling opnieuw
-      }
-    });
-
-    // Start countdown bij diawisseling
-    Reveal.addEventListener('slidechanged', () => startCountdown());
-
-    // Start countdown bij laden van de pagina
-    document.addEventListener('DOMContentLoaded', startCountdown);
-  </script>
+</script>
 </body>
 </html>
